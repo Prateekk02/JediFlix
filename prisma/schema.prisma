@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users{
+  id String @id @default(uuid()) @db.Uuid
+  name String
+  image String? 
+  email String?
+  emailVerified DateTime?
+  hashedPasswored String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  favoriteIds String[] @db.Uuid
+  sessions Session[]
+  accounts Account[]
+}
+
+model Account{
+  id String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  type String
+  provider String
+  providerAccountId String
+  refresh_token String? @db.Uuid
+  expired_at Int?
+  token_type String?
+  scope String?
+  id_token String? @db.Uuid
+  session_state String? 
+
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider,providerAccountId]) 
+}
+
+model Session{
+  id String @id @default(uuid()) @db.Uuid
+  sessionToken String @unique
+  userId String @db.Uuid
+  expired DateTime
+
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken{
+  id String @id @default(uuid()) @db.Uuid
+  identifier String
+  token String @unique
+  expires DateTime
+
+  @@unique([identifier, token])
+}
+
+model Movie{
+  id String @id @default(uuid()) @db.Uuid
+  title String
+  description String
+  videoUrl String
+  thumbnailUrl String
+  genre String
+  duration String
+}
+
+
+
+
+
