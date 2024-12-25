@@ -17,7 +17,7 @@ model Users{
   id String @id @default(uuid()) @db.Uuid
   name String
   image String? 
-  email String? @unique
+  email String @unique
   emailVerified DateTime?
   hashedPassword String?
   createdAt DateTime @default(now())

@@ -1,24 +1,5 @@
-import { NextPageContext } from 'next';
-import {getSession, signOut} from 'next-auth/react';
-
-
-export async function getServerSideProps(context: NextPageContext){
-    const session = await getSession(context);
-
-    if(!session){
-      return {
-        redirect:{
-          destination: '/Auth',
-          permanent: false
-        }
-      }
-    }
-
-    return {
-      props:{}
-    }
-} 
-
+'use client'
+import { signOut } from "next-auth/react";
 
 const Home = () =>{
   return <>

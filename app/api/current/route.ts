@@ -1,16 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
+import { NextResponse } from "next/server";
 import serverAuth from "@/lib/serverAuth";
 
-const handler = (req: NextApiRequest, res:NextApiResponse) =>{
-    try{
-        const currentUser = serverAuth(req)
+const handler = async () => {
+  try {
+    const currentUser = await serverAuth(); 
+    return NextResponse.json(currentUser); 
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Something went wrong" }, { status: 400 }); 
+  }
+};
 
-        return res.status(200).json(currentUser)
-    }catch(error){
-        console.log(error);
-        return res.status(400).end();
-    }
-}
-
-export {handler as POST}
+export { handler as POST };
